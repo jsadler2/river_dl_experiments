@@ -1,0 +1,5 @@
+experiment_name: 'catch_attr'
+pt_vars: 'both'
+ft_vars: 'both'
+x_vars: ['seg_rain', 'seg_tave_air', 'seginc_swrad', 'seg_length', 'seginc_potet', 'seg_slope', 'seg_humid', 'seg_elev']
+use_catch_attr: True
