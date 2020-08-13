@@ -1,0 +1,4 @@
+experiment_name: 'E4'
+pt_vars: 'both'
+ft_vars: 'flow'
+exclude_file: 'joint_modeling/exp_E/exclude_temp_sites.yml'

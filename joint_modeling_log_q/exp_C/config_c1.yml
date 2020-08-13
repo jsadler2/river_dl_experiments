@@ -1,0 +1,4 @@
+experiment_name: 'C1'
+pt_vars: 'temp'
+ft_vars: 'temp'
+reduce_temp_trn: 0.9

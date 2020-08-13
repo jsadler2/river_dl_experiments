@@ -1,0 +1,616 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cluster nodes: 5
+Job counts:
+	count	jobs
+	1	all
+	20	calc_overall_metrics
+	5	calc_reach_specific_metrics
+	5	combined_metrics
+	1	combined_run_metrics
+	1	combined_run_reach_metrics
+	10	make_predictions
+	1	prep_io_data
+	5	train
+	49
+
+[Tue Aug 11 10:34:28 2020]
+rule prep_io_data:
+    input: /home/jsadler/drb-dl-model/data/in/obs_temp_full, /home/jsadler/drb-dl-model/data/in/obs_flow_full, /home/jsadler/drb-dl-model/data/in/uncal_sntemp_input_output_subset, /home/jsadler/drb-dl-model/data/in/distance_matrix_subset.npz, /home/jsadler/drb-dl-model/data/in/seg_attr_drb.feather
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    jobid: 44
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4
+
+Submitted job 44 with external jobid 'Submitted batch job 13200'.
+[Tue Aug 11 10:34:48 2020]
+Finished job 44.
+1 of 49 steps (2%) done
+
+[Tue Aug 11 10:34:48 2020]
+rule train:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/trained_weights/, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/pretrained_weights/
+    jobid: 47
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=3
+
+
+         "python /home/jsadler/drb-dl-model/river_dl/train_model.py -o /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3 -i /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz -m /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/trained_weights/ -p 200 -f 100 -q" 
+         
+Submitted job 47 with external jobid 'Submitted batch job 13205'.
+
+[Tue Aug 11 10:34:48 2020]
+rule train:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/trained_weights/, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/pretrained_weights/
+    jobid: 45
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=1
+
+
+         "python /home/jsadler/drb-dl-model/river_dl/train_model.py -o /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1 -i /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz -m /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/trained_weights/ -p 200 -f 100 -q" 
+         
+Submitted job 45 with external jobid 'Submitted batch job 13207'.
+
+[Tue Aug 11 10:34:48 2020]
+rule train:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/trained_weights/, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/pretrained_weights/
+    jobid: 46
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=2
+
+
+         "python /home/jsadler/drb-dl-model/river_dl/train_model.py -o /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2 -i /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz -m /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/trained_weights/ -p 200 -f 100 -q" 
+         
+Submitted job 46 with external jobid 'Submitted batch job 13210'.
+
+[Tue Aug 11 10:34:48 2020]
+rule train:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/trained_weights/, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/pretrained_weights/
+    jobid: 43
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=0
+
+
+         "python /home/jsadler/drb-dl-model/river_dl/train_model.py -o /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0 -i /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz -m /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/trained_weights/ -p 200 -f 100 -q" 
+         
+Submitted job 43 with external jobid 'Submitted batch job 13213'.
+
+[Tue Aug 11 10:34:48 2020]
+rule train:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/trained_weights/, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/pretrained_weights/
+    jobid: 48
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=4
+
+
+         "python /home/jsadler/drb-dl-model/river_dl/train_model.py -o /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4 -i /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz -m /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/trained_weights/ -p 200 -f 100 -q" 
+         
+Submitted job 48 with external jobid 'Submitted batch job 13216'.
+[Tue Aug 11 11:09:21 2020]
+Finished job 47.
+2 of 49 steps (4%) done
+
+[Tue Aug 11 11:09:21 2020]
+rule make_predictions:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/trained_weights/, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/trn_preds.feather
+    jobid: 39
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=3, partition=trn
+
+Submitted job 39 with external jobid 'Submitted batch job 13254'.
+[Tue Aug 11 11:09:31 2020]
+Finished job 45.
+3 of 49 steps (6%) done
+
+[Tue Aug 11 11:09:31 2020]
+rule make_predictions:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/trained_weights/, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/trn_preds.feather
+    jobid: 35
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=1, partition=trn
+
+Submitted job 35 with external jobid 'Submitted batch job 13255'.
+[Tue Aug 11 11:38:43 2020]
+Finished job 46.
+4 of 49 steps (8%) done
+
+[Tue Aug 11 11:38:43 2020]
+rule make_predictions:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/trained_weights/, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/trn_preds.feather
+    jobid: 37
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=2, partition=trn
+
+Submitted job 37 with external jobid 'Submitted batch job 13257'.
+[Tue Aug 11 11:40:53 2020]
+Finished job 43.
+5 of 49 steps (10%) done
+
+[Tue Aug 11 11:40:53 2020]
+rule make_predictions:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/trained_weights/, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/trn_preds.feather
+    jobid: 33
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=0, partition=trn
+
+Submitted job 33 with external jobid 'Submitted batch job 13258'.
+[Tue Aug 11 12:11:15 2020]
+Finished job 48.
+6 of 49 steps (12%) done
+
+[Tue Aug 11 12:11:15 2020]
+rule make_predictions:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/trained_weights/, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/trn_preds.feather
+    jobid: 41
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=4, partition=trn
+
+Submitted job 41 with external jobid 'Submitted batch job 13263'.
+[Tue Aug 11 12:51:28 2020]
+Finished job 39.
+7 of 49 steps (14%) done
+[Tue Aug 11 12:51:28 2020]
+Finished job 35.
+8 of 49 steps (16%) done
+
+[Tue Aug 11 12:51:28 2020]
+rule make_predictions:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/trained_weights/, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/tst_preds.feather
+    jobid: 38
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=2, partition=tst
+
+Submitted job 38 with external jobid 'Submitted batch job 13352'.
+
+[Tue Aug 11 12:51:28 2020]
+rule make_predictions:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/trained_weights/, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/tst_preds.feather
+    jobid: 36
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=1, partition=tst
+
+Submitted job 36 with external jobid 'Submitted batch job 13353'.
+[Tue Aug 11 12:52:28 2020]
+Finished job 37.
+9 of 49 steps (18%) done
+
+[Tue Aug 11 12:52:28 2020]
+rule make_predictions:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/trained_weights/, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/tst_preds.feather
+    jobid: 34
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=0, partition=tst
+
+Submitted job 34 with external jobid 'Submitted batch job 13356'.
+[Tue Aug 11 12:52:38 2020]
+Finished job 33.
+10 of 49 steps (20%) done
+
+[Tue Aug 11 12:52:38 2020]
+rule make_predictions:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/trained_weights/, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/tst_preds.feather
+    jobid: 42
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=4, partition=tst
+
+Submitted job 42 with external jobid 'Submitted batch job 13358'.
+[Tue Aug 11 12:54:08 2020]
+Finished job 41.
+11 of 49 steps (22%) done
+
+[Tue Aug 11 12:54:08 2020]
+rule make_predictions:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/trained_weights/, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/prepped.npz
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/tst_preds.feather
+    jobid: 40
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=3, partition=tst
+
+Submitted job 40 with external jobid 'Submitted batch job 13363'.
+[Tue Aug 11 19:39:54 2020]
+Finished job 38.
+12 of 49 steps (24%) done
+
+[Tue Aug 11 19:39:54 2020]
+rule calc_reach_specific_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/trn_preds.feather, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/tst_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_temp_full, /home/jsadler/drb-dl-model/data/in/obs_flow_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/reach_metrics.csv
+    jobid: 10
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=2
+
+Submitted job 10 with external jobid 'Submitted batch job 13464'.
+[Tue Aug 11 19:40:14 2020]
+Finished job 36.
+13 of 49 steps (27%) done
+
+[Tue Aug 11 19:40:14 2020]
+rule calc_reach_specific_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/trn_preds.feather, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/tst_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_temp_full, /home/jsadler/drb-dl-model/data/in/obs_flow_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/reach_metrics.csv
+    jobid: 9
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=1
+
+Submitted job 9 with external jobid 'Submitted batch job 13465'.
+[Tue Aug 11 19:41:14 2020]
+Finished job 34.
+14 of 49 steps (29%) done
+
+[Tue Aug 11 19:41:14 2020]
+rule calc_reach_specific_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/trn_preds.feather, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/tst_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_temp_full, /home/jsadler/drb-dl-model/data/in/obs_flow_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/reach_metrics.csv
+    jobid: 8
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=0
+
+Submitted job 8 with external jobid 'Submitted batch job 13468'.
+[Tue Aug 11 19:41:54 2020]
+Finished job 42.
+15 of 49 steps (31%) done
+
+[Tue Aug 11 19:41:54 2020]
+rule calc_reach_specific_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/trn_preds.feather, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/tst_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_temp_full, /home/jsadler/drb-dl-model/data/in/obs_flow_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/reach_metrics.csv
+    jobid: 12
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=4
+
+Submitted job 12 with external jobid 'Submitted batch job 13470'.
+[Tue Aug 11 19:43:34 2020]
+Finished job 40.
+16 of 49 steps (33%) done
+
+[Tue Aug 11 19:43:34 2020]
+rule calc_reach_specific_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/trn_preds.feather, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/tst_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_temp_full, /home/jsadler/drb-dl-model/data/in/obs_flow_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/reach_metrics.csv
+    jobid: 11
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=3
+
+Submitted job 11 with external jobid 'Submitted batch job 13474'.
+[Tue Aug 11 20:05:16 2020]
+Finished job 10.
+17 of 49 steps (35%) done
+
+[Tue Aug 11 20:05:16 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/trn_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_temp_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/trn_temp_metrics.csv
+    jobid: 25
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=3, partition=trn, variable=temp
+
+[Tue Aug 11 20:05:16 2020]
+Finished job 9.
+18 of 49 steps (37%) done
+Submitted job 25 with external jobid 'Submitted batch job 13560'.
+
+[Tue Aug 11 20:05:16 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/trn_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_temp_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/trn_temp_metrics.csv
+    jobid: 17
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=1, partition=trn, variable=temp
+
+Submitted job 17 with external jobid 'Submitted batch job 13561'.
+[Tue Aug 11 20:05:36 2020]
+Finished job 8.
+19 of 49 steps (39%) done
+
+[Tue Aug 11 20:05:36 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/trn_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_temp_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/trn_temp_metrics.csv
+    jobid: 21
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=2, partition=trn, variable=temp
+
+Submitted job 21 with external jobid 'Submitted batch job 13565'.
+[Tue Aug 11 20:05:46 2020]
+Finished job 12.
+20 of 49 steps (41%) done
+
+[Tue Aug 11 20:05:46 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/trn_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_flow_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/trn_flow_metrics.csv
+    jobid: 14
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=0, partition=trn, variable=flow
+
+Submitted job 14 with external jobid 'Submitted batch job 13567'.
+[Tue Aug 11 20:06:06 2020]
+Finished job 11.
+21 of 49 steps (43%) done
+
+[Tue Aug 11 20:06:06 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/trn_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_temp_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/trn_temp_metrics.csv
+    jobid: 29
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=4, partition=trn, variable=temp
+
+Submitted job 29 with external jobid 'Submitted batch job 13571'.
+[Tue Aug 11 20:19:07 2020]
+Finished job 25.
+22 of 49 steps (45%) done
+
+[Tue Aug 11 20:19:07 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/trn_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_flow_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/trn_flow_metrics.csv
+    jobid: 26
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=3, partition=trn, variable=flow
+
+Submitted job 26 with external jobid 'Submitted batch job 13655'.
+[Tue Aug 11 20:19:17 2020]
+Finished job 17.
+23 of 49 steps (47%) done
+
+[Tue Aug 11 20:19:17 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/trn_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_flow_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/trn_flow_metrics.csv
+    jobid: 18
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=1, partition=trn, variable=flow
+
+Submitted job 18 with external jobid 'Submitted batch job 13657'.
+[Tue Aug 11 20:19:37 2020]
+Finished job 21.
+24 of 49 steps (49%) done
+
+[Tue Aug 11 20:19:37 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/trn_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_flow_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/trn_flow_metrics.csv
+    jobid: 22
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=2, partition=trn, variable=flow
+
+Submitted job 22 with external jobid 'Submitted batch job 13661'.
+[Tue Aug 11 20:19:47 2020]
+Finished job 14.
+25 of 49 steps (51%) done
+
+[Tue Aug 11 20:19:47 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/trn_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_flow_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/trn_flow_metrics.csv
+    jobid: 30
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=4, partition=trn, variable=flow
+
+[Tue Aug 11 20:19:47 2020]
+Finished job 29.
+26 of 49 steps (53%) done
+Submitted job 30 with external jobid 'Submitted batch job 13664'.
+
+[Tue Aug 11 20:19:47 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/trn_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_temp_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/trn_temp_metrics.csv
+    jobid: 13
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=0, partition=trn, variable=temp
+
+Submitted job 13 with external jobid 'Submitted batch job 13666'.
+[Tue Aug 11 20:23:57 2020]
+Finished job 26.
+27 of 49 steps (55%) done
+
+[Tue Aug 11 20:23:57 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/tst_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_flow_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/tst_flow_metrics.csv
+    jobid: 20
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=1, partition=tst, variable=flow
+
+Submitted job 20 with external jobid 'Submitted batch job 13752'.
+[Tue Aug 11 20:23:57 2020]
+Finished job 18.
+28 of 49 steps (57%) done
+
+[Tue Aug 11 20:23:57 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/tst_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_flow_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/tst_flow_metrics.csv
+    jobid: 28
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=3, partition=tst, variable=flow
+
+Submitted job 28 with external jobid 'Submitted batch job 13753'.
+[Tue Aug 11 20:24:07 2020]
+Finished job 22.
+29 of 49 steps (59%) done
+
+[Tue Aug 11 20:24:07 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/tst_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_temp_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/tst_temp_metrics.csv
+    jobid: 15
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=0, partition=tst, variable=temp
+
+Submitted job 15 with external jobid 'Submitted batch job 13758'.
+[Tue Aug 11 20:24:18 2020]
+Finished job 30.
+30 of 49 steps (61%) done
+
+[Tue Aug 11 20:24:18 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/tst_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_flow_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/tst_flow_metrics.csv
+    jobid: 16
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=0, partition=tst, variable=flow
+
+Submitted job 16 with external jobid 'Submitted batch job 13765'.
+[Tue Aug 11 20:24:28 2020]
+Finished job 13.
+31 of 49 steps (63%) done
+
+[Tue Aug 11 20:24:28 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/tst_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_temp_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/tst_temp_metrics.csv
+    jobid: 19
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=1, partition=tst, variable=temp
+
+Submitted job 19 with external jobid 'Submitted batch job 13770'.
+[Tue Aug 11 20:26:28 2020]
+Finished job 20.
+32 of 49 steps (65%) done
+
+[Tue Aug 11 20:26:28 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/tst_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_temp_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/tst_temp_metrics.csv
+    jobid: 27
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=3, partition=tst, variable=temp
+
+Submitted job 27 with external jobid 'Submitted batch job 13852'.
+[Tue Aug 11 20:26:28 2020]
+Finished job 28.
+33 of 49 steps (67%) done
+
+[Tue Aug 11 20:26:28 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/tst_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_flow_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/tst_flow_metrics.csv
+    jobid: 32
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=4, partition=tst, variable=flow
+
+Submitted job 32 with external jobid 'Submitted batch job 13854'.
+[Tue Aug 11 20:26:38 2020]
+Finished job 15.
+34 of 49 steps (69%) done
+
+[Tue Aug 11 20:26:38 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/tst_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_temp_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/tst_temp_metrics.csv
+    jobid: 23
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=2, partition=tst, variable=temp
+
+[Tue Aug 11 20:26:38 2020]
+Finished job 16.
+35 of 49 steps (71%) done
+Submitted job 23 with external jobid 'Submitted batch job 13864'.
+
+[Tue Aug 11 20:26:38 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/tst_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_temp_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/tst_temp_metrics.csv
+    jobid: 31
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=4, partition=tst, variable=temp
+
+Submitted job 31 with external jobid 'Submitted batch job 13865'.
+[Tue Aug 11 20:26:48 2020]
+Finished job 19.
+36 of 49 steps (73%) done
+
+[Tue Aug 11 20:26:48 2020]
+rule calc_overall_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/tst_preds.feather, /home/jsadler/drb-dl-model/data/in/obs_flow_full
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/tst_flow_metrics.csv
+    jobid: 24
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=2, partition=tst, variable=flow
+
+Submitted job 24 with external jobid 'Submitted batch job 13868'.
+[Tue Aug 11 20:28:38 2020]
+Finished job 27.
+37 of 49 steps (76%) done
+[Tue Aug 11 20:28:38 2020]
+Finished job 32.
+38 of 49 steps (78%) done
+
+[Tue Aug 11 20:28:38 2020]
+rule combined_run_reach_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/reach_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/reach_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/reach_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/reach_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/reach_metrics.csv
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/overall_reach_metrics.nc
+    jobid: 2
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4
+
+Submitted job 2 with external jobid 'Submitted batch job 13951'.
+
+[Tue Aug 11 20:28:38 2020]
+rule combined_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/trn_temp_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/trn_flow_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/tst_temp_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/tst_flow_metrics.csv
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/combined_metrics.csv
+    jobid: 4
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=1
+
+Submitted job 4 with external jobid 'Submitted batch job 13952'.
+[Tue Aug 11 20:28:48 2020]
+Finished job 23.
+39 of 49 steps (80%) done
+
+[Tue Aug 11 20:28:48 2020]
+rule combined_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/trn_temp_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/trn_flow_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/tst_temp_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/tst_flow_metrics.csv
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/combined_metrics.csv
+    jobid: 3
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=0
+
+[Tue Aug 11 20:28:48 2020]
+Finished job 31.
+40 of 49 steps (82%) done
+Submitted job 3 with external jobid 'Submitted batch job 13963'.
+
+[Tue Aug 11 20:28:48 2020]
+rule combined_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/trn_temp_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/trn_flow_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/tst_temp_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/tst_flow_metrics.csv
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/combined_metrics.csv
+    jobid: 6
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=3
+
+Submitted job 6 with external jobid 'Submitted batch job 13964'.
+[Tue Aug 11 20:28:58 2020]
+Finished job 24.
+41 of 49 steps (84%) done
+
+[Tue Aug 11 20:28:58 2020]
+rule combined_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/trn_temp_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/trn_flow_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/tst_temp_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/tst_flow_metrics.csv
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/combined_metrics.csv
+    jobid: 7
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=4
+
+Submitted job 7 with external jobid 'Submitted batch job 13967'.
+[Tue Aug 11 20:30:18 2020]
+Finished job 2.
+42 of 49 steps (86%) done
+
+[Tue Aug 11 20:30:18 2020]
+rule combined_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/trn_temp_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/trn_flow_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/tst_temp_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/tst_flow_metrics.csv
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/combined_metrics.csv
+    jobid: 5
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4, run_id=2
+
+[Tue Aug 11 20:30:18 2020]
+Finished job 4.
+43 of 49 steps (88%) done
+Submitted job 5 with external jobid 'Submitted batch job 14049'.
+[Tue Aug 11 20:30:29 2020]
+Finished job 3.
+44 of 49 steps (90%) done
+[Tue Aug 11 20:30:29 2020]
+Finished job 6.
+45 of 49 steps (92%) done
+[Tue Aug 11 20:30:29 2020]
+Finished job 7.
+46 of 49 steps (94%) done
+[Tue Aug 11 20:31:49 2020]
+Finished job 5.
+47 of 49 steps (96%) done
+
+[Tue Aug 11 20:31:49 2020]
+rule combined_run_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/0/combined_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/1/combined_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/2/combined_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/3/combined_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/4/combined_metrics.csv
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/overall_metrics.nc
+    jobid: 1
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q, experiment=A4
+
+Submitted job 1 with external jobid 'Submitted batch job 14128'.
+[Tue Aug 11 20:32:59 2020]
+Finished job 1.
+48 of 49 steps (98%) done
+
+[Tue Aug 11 20:32:59 2020]
+localrule all:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/overall_metrics.nc, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling_log_q/ex_A4/overall_reach_metrics.nc
+    jobid: 0
+
+[Tue Aug 11 20:32:59 2020]
+Finished job 0.
+49 of 49 steps (100%) done
+Complete log: /home/jsadler/dl_experiments/subset/.snakemake/log/2020-08-11T103425.944893.snakemake.log

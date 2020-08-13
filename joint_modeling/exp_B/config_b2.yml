@@ -1,0 +1,4 @@
+experiment_name: 'B2'
+pt_vars: 'both'
+ft_vars: 'temp'
+exclude_file: 'exp_B/exclude_temp_sites.yml'

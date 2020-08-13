@@ -1,0 +1,6 @@
+grp:
+    variable: "temp"
+    seg_id_nats_ex:
+        - 2014
+        - 2012
+        - 2037

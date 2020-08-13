@@ -1,0 +1,4 @@
+experiment_name: 'D1'
+pt_vars: 'temp'
+ft_vars: 'temp'
+exclude_file: 'joint_modeling/exp_D/exclude_temp_sites.yml'

@@ -1,0 +1,43 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cluster nodes: 5
+Job counts:
+	count	jobs
+	1	all
+	1	combined_run_metrics
+	1	combined_run_reach_metrics
+	3
+
+[Tue Aug  4 17:13:11 2020]
+rule combined_run_reach_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling/ex_B1/0/reach_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling/ex_B1/1/reach_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling/ex_B1/2/reach_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling/ex_B1/3/reach_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling/ex_B1/4/reach_metrics.csv
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling/ex_B1/overall_reach_metrics.nc
+    jobid: 2
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling, experiment=B1
+
+Submitted job 2 with external jobid 'Submitted batch job 12309'.
+
+[Tue Aug  4 17:13:11 2020]
+rule combined_run_metrics:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling/ex_B1/0/combined_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling/ex_B1/1/combined_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling/ex_B1/2/combined_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling/ex_B1/3/combined_metrics.csv, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling/ex_B1/4/combined_metrics.csv
+    output: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling/ex_B1/overall_metrics.nc
+    jobid: 1
+    wildcards: outdir=/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling, experiment=B1
+
+Submitted job 1 with external jobid 'Submitted batch job 12310'.
+[Tue Aug  4 17:13:21 2020]
+Finished job 2.
+1 of 3 steps (33%) done
+[Tue Aug  4 17:13:21 2020]
+Finished job 1.
+2 of 3 steps (67%) done
+
+[Tue Aug  4 17:13:21 2020]
+localrule all:
+    input: /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling/ex_B1/overall_metrics.nc, /caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/joint_modeling/ex_B1/overall_reach_metrics.nc
+    jobid: 0
+
+[Tue Aug  4 17:13:21 2020]
+Finished job 0.
+3 of 3 steps (100%) done
+Complete log: /home/jsadler/dl_experiments/subset/.snakemake/log/2020-08-04T171308.551366.snakemake.log

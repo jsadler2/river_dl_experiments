@@ -1,0 +1,3 @@
+experiment_name: 'A2'
+pt_vars: 'both'
+ft_vars: 'temp'

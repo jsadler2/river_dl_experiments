@@ -1,0 +1,4 @@
+experiment_name: 'C5'
+pt_vars: 'flow'
+ft_vars: 'flow'
+reduce_temp_trn: 0.9
