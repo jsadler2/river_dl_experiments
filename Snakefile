@@ -2,15 +2,12 @@ import os
 import pandas as pd
 
 # add scripts dir to path
-import sys
-code_dir = "/home/jsadler/drb-dl-model/code"
-scripts_path =  os.path.abspath(code_dir)
-sys.path.insert(0, scripts_path)
+code_dir = "/home/jsadler/drb-dl-model/river_dl"
 shell.prefix("module load analytics cuda100/toolkit/10.0.130 \n \
               run_training -e /home/jsadler/.conda/envs/rgcn --no-node-list ")
 
-from preproc_utils import prep_data
-from postproc_utils import predict_from_file, overall_metrics, reach_specific_metrics, combine_csvs
+from river_dl.preproc_utils import prep_data
+from river_dl.postproc_utils import predict_from_file, overall_metrics, reach_specific_metrics, combine_csvs
 data_dir = "/home/jsadler/drb-dl-model/data/in"
 out_dir = "/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset"
 exper = config['experiment_name']
@@ -43,6 +40,7 @@ rule prep_io_data:
                   catch_prop_file=catch_attr,
                   pretrain_vars=config['pt_vars'],
                   finetune_vars=config['ft_vars'],
+                  exclude_file=config.get('exclude_file'),
                   test_start_date=params.test_start_date,
                   n_test_yr=params.n_test_yr, out_file=output[0])
 
