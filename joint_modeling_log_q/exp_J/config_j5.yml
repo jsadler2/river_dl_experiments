@@ -1,0 +1,5 @@
+experiment_name: 'J5'
+pt_vars: 'flow'
+ft_vars: 'flow'
+reduce_temp_trn: 0.9
+reduce_flow_trn: 0.95

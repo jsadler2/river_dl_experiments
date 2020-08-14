@@ -1,0 +1,4 @@
+experiment_name: 'G5'
+pt_vars: 'flow'
+ft_vars: 'flow'
+exclude_file: 'joint_modeling_log_q/exp_G/exclude_temp_sites.yml'

@@ -1,5 +1,5 @@
 experiment_name: 'F3'
 pt_vars: 'both'
 ft_vars: 'both'
-exclude_file: 'joint_modeling/exp_F/exclude_temp_sites.yml'
+exclude_file: 'joint_modeling_log_q/exp_F/exclude_temp_sites.yml'
 reduce_flow_trn: 0.9

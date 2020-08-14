@@ -1,0 +1,5 @@
+experiment_name: 'H1'
+pt_vars: 'temp'
+ft_vars: 'temp'
+exclude_file: 'joint_modeling_log_q/exp_H/exclude_temp_sites.yml'
+reduce_flow_trn: 0.95

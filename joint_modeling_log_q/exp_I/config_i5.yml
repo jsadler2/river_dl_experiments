@@ -1,0 +1,5 @@
+experiment_name: 'I5'
+pt_vars: 'flow'
+ft_vars: 'flow'
+exclude_file: 'joint_modeling_log_q/exp_I/exclude_temp_sites.yml'
+reduce_flow_trn: 0.95

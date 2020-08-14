@@ -7,7 +7,7 @@ shell.prefix("module load analytics cuda100/toolkit/10.0.130 \n \
               run_training -e /home/jsadler/.conda/envs/rgcn --no-node-list ")
 
 from river_dl.preproc_utils import prep_data
-from river_dl.postproc_utils import predict_from_file, overall_metrics, reach_specific_metrics, combine_csvs
+from river_dl.postproc_utils import predict_from_file, overall_metrics, combined_reach_specific, combine_csvs
 data_dir = "/home/jsadler/drb-dl-model/data/in"
 out_dir = "/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset"
 exper = config['experiment_name']
@@ -16,7 +16,8 @@ num_replicates = 5
 
 rule all:
     input:
-        f"{out_dir}/ex_{exper}/overall_metrics.nc"
+        f"{out_dir}/ex_{exper}/overall_metrics.nc",
+        f"{out_dir}/ex_{exper}/overall_reach_metrics.nc"
 
 
 rule prep_io_data:
@@ -32,12 +33,10 @@ rule prep_io_data:
         test_start_date='2004-09-30',
         n_test_yr=12
     run:
-        if not config['use_catch_attr']:
-            catch_attr = None
-        else:
-            catch_attr = input['catch_attr']
-        prep_data(input[0], input[1], input[2], input[3], config['x_vars'],
-                  catch_prop_file=catch_attr,
+        x_vars = ['seg_rain', 'seg_tave_air', 'seginc_swrad', 'seg_length',
+                  'seginc_potet', 'seg_slope', 'seg_humid', 'seg_elev']
+        prep_data(input[0], input[1], input[2], input[3], x_vars,
+                  catch_prop_file=input['catch_attr',
                   pretrain_vars=config['pt_vars'],
                   finetune_vars=config['ft_vars'],
                   exclude_file=config.get('exclude_file'),
@@ -56,11 +55,12 @@ rule train:
         # getting the base path to put the training outputs in
         # I omit the last slash (hence '[:-1]' so the split works properly
         run_dir=lambda wildcards, output: os.path.split(output[0][:-1])[0],
+        flow_in_temp=lambda wildcards: "-q" if config['flow_in_temp'] else "" ,
         pt_epochs=200,
         ft_epochs=100
     shell:
          """
-         "python {code_dir}/train_model.py -o {params.run_dir} -i {input[0]} -m {output[0]} -p {params.pt_epochs} -f {params.ft_epochs}" 
+         "python {code_dir}/train_model.py -o {params.run_dir} -i {input[0]} -m {output[0]} -p {params.pt_epochs} -f {params.ft_epochs} {params.flow_in_temp}" 
          """
 
 rule make_predictions:
@@ -74,7 +74,8 @@ rule make_predictions:
         "{outdir}/ex_{experiment}/{run_id}/{partition}_preds.feather",
     run:
         predict_from_file(input[0], input[1], params.hidden_size,
-                          wildcards.partition, output[0], half_tst=params.half_tst)
+                          wildcards.partition, output[0], flow_in_temp=config.get('flow_in_temp', False),
+                          half_tst=params.half_tst)
 
 
 rule calc_overall_metrics:
@@ -97,29 +98,45 @@ rule combined_metrics:
         combine_csvs(input, output[0])
 
 
-rule combine_replicates:
+def combine_replicate_csvs(csvs):
+    df_list = []
+    for i, metric_file in enumerate(csvs):
+        df = pd.read_csv(metric_file)
+        df['run_id'] = i
+        df_list.append(df)
+    df = pd.concat(df_list, axis=0)
+    ds = df.set_index(['run_id', 'variable', 'partition', 'seg_id_nat']).to_xarray()
+    return ds
+
+rule combined_run_metrics:
     input:
          expand("{outdir}/ex_{experiment}/{run_id}/combined_metrics.csv",
                 run_id=list(range(num_replicates)), allow_missing=True)
     output:
          "{outdir}/ex_{experiment}/overall_metrics.nc"
     run:
-        df_list = []
-        for i, metric_file in enumerate(input):
-            df = pd.read_csv(metric_file)
-            df['run_id'] = i
-            df_list.append(df)
-        df = pd.concat(df_list, axis=0)
-        ds = df.set_index(['run_id', 'variable', 'partition']).to_xarray()
+        ds = combine_replicate_csvs(input)
         ds.to_netcdf(output[0])
 
 
 rule calc_reach_specific_metrics:
     input: 
-        "{outdir}/ex_{experiment}/{run_id}/{partition}_preds.feather",
-        expand("{data_dir}/obs_{variable}_full.csv", data_dir=data_dir, allow_missing=True)
+         "{outdir}/ex_{experiment}/{run_id}/trn_preds.feather",
+         "{outdir}/ex_{experiment}/{run_id}/tst_preds.feather",
+         f"{data_dir}/obs_temp_full",
+         f"{data_dir}/obs_flow_full",
     output:
-        "{outdir}/ex_{experiment}/{run_id}/{partition}_{variable}_reach_metrics.feather",
+        "{outdir}/ex_{experiment}/{run_id}/reach_metrics.csv",
     run:
-        reach_specific_metrics(input[0], input[1], output[0],
-                               wildcards.variable)
+        combined_reach_specific(input[0], input[1], input[2], input[3], output[0])
+
+
+rule combined_run_reach_metrics:
+    input:
+         expand("{outdir}/ex_{experiment}/{run_id}/reach_metrics.csv",
+                run_id=list(range(num_replicates)), allow_missing=True)
+    output:
+         "{outdir}/ex_{experiment}/overall_reach_metrics.nc"
+    run:
+        ds = combine_replicate_csvs(input)
+        ds.to_netcdf(output[0])

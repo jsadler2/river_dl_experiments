@@ -1,5 +1,0 @@
-experiment_name: 'A1'
-pt_vars: 'temp'
-ft_vars: 'temp'
-x_vars: ['seg_rain', 'seg_tave_air', 'seginc_swrad', 'seg_length', 'seginc_potet', 'seg_slope', 'seg_humid', 'seg_elev']
-use_catch_attr: True
