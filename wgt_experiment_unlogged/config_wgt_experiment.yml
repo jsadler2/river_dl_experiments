@@ -1,0 +1,35 @@
+experiment_name: 'wgt_experiment_unlogged'
+experiments:
+    A:
+        pt_tmp_wgt: 1
+        ft_tmp_wgt: 1
+    B:
+        pt_tmp_wgt: 0.9
+        ft_tmp_wgt: 0.9
+    C:
+        pt_tmp_wgt: 0.8
+        ft_tmp_wgt: 0.8
+    D:
+        pt_tmp_wgt: 0.7
+        ft_tmp_wgt: 0.7
+    E:
+        pt_tmp_wgt: 0.6
+        ft_tmp_wgt: 0.6
+    F:
+        pt_tmp_wgt: 0.5
+        ft_tmp_wgt: 0.5
+    G:
+        pt_tmp_wgt: 0.4
+        ft_tmp_wgt: 0.4
+    H:
+        pt_tmp_wgt: 0.3
+        ft_tmp_wgt: 0.3
+    I:
+        pt_tmp_wgt: 0.2
+        ft_tmp_wgt: 0.2
+    J:
+        pt_tmp_wgt: 0.1
+        ft_tmp_wgt: 0.1
+    K:
+        pt_tmp_wgt: 0.0
+        ft_tmp_wgt: 0.0

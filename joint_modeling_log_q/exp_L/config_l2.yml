@@ -1,0 +1,4 @@
+experiment_name: 'L2'
+pt_vars: 'both'
+ft_vars: 'temp'
+reduce_flow_trn: 0.5

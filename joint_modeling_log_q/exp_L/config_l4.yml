@@ -1,0 +1,4 @@
+experiment_name: 'L4'
+pt_vars: 'both'
+ft_vars: 'flow'
+reduce_flow_trn: 0.5

@@ -1,0 +1,20 @@
+exp_name: 'data_sparsity_all_temp'
+reduce_temp_trn: 0
+experiments:
+    A:
+        reduce_flow_trn: 0.99
+    B:
+        reduce_flow_trn: 0.95
+    C:
+        reduce_flow_trn: 0.9
+    D:
+        reduce_flow_trn: 0.75
+    E:
+        reduce_flow_trn: 0.5
+    F:
+        reduce_flow_trn: 0.25
+    G:
+        reduce_flow_trn: 0
+    Z:
+        reduce_flow_trn: 0.99
+        rmse_tmp_wgt: 1

@@ -1,0 +1,4 @@
+experiment_name: 'K1'
+pt_vars: 'temp'
+ft_vars: 'temp'
+reduce_flow_trn: 0.95
