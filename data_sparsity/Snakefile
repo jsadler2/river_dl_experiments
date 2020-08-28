@@ -30,18 +30,17 @@ rule prep_io_data:
          f"{data_dir}/distance_matrix_subset.npz",
          catch_attr = f"{data_dir}/seg_attr_drb.feather"
     output:
-        "{outdir}/ex_{experiment}/prepped.npz"
+        "{outdir}/ex_flow_red_{flow_red}_temp_red_{temp_red}/{run_id}/prepped.npz"
     params:
         test_start_date='2004-09-30',
-        reduce_flow_trn=lambda wildcards: config['experiments'][wildcards.experiment]['reduce_flow_trn'],
         n_test_yr=12
     run:
         prep_data(input[0], input[1], input[2], input[3], x_vars,
                   catch_prop_file=input['catch_attr'],
                   pretrain_vars='both',
                   finetune_vars='both',
-                  reduce_temp_trn=config['reduce_temp_trn'],
-                  reduce_flow_trn=params.reduce_flow_trn,
+                  reduce_temp_trn=wildcards.temp_red,
+                  reduce_flow_trn=wildcards.flow_red,
                   exclude_file=config.get('exclude_file'),
                   test_start_date=params.test_start_date,
                   log_q=True,
@@ -51,7 +50,7 @@ rule prep_io_data:
 # this must be a shell command so that the correct GPU libraries are loaded and used
 rule train:
     input:
-         "{outdir}/ex_{experiment}/prepped.npz"
+         "{outdir}/ex_{experiment}/{run_id}/prepped.npz"
     output:
         directory("{outdir}/ex_{experiment}/{run_id}/trained_weights/"),
         directory("{outdir}/ex_{experiment}/{run_id}/pretrained_weights/")
@@ -59,7 +58,7 @@ rule train:
         # getting the base path to put the training outputs in
         # I omit the last slash (hence '[:-1]' so the split works properly
         run_dir=lambda wildcards, output: os.path.split(output[0][:-1])[0],
-        rmse_tmp_wgt=lambda wildcards: config['experiments'][wildcards.experiment].get('rmse_tmp_wgt', 0.5),
+        rmse_tmp_wgt= 0.5,
         flow_in_temp="-q", 
         pt_epochs=200,
         ft_epochs=100,
@@ -71,7 +70,7 @@ rule train:
 rule make_predictions:
     input: 
         "{outdir}/ex_{experiment}/{run_id}/trained_weights/",
-        "{outdir}/ex_{experiment}/prepped.npz",
+        "{outdir}/ex_{experiment}/{run_id}/prepped.npz",
     params:
         hidden_size=20,
         half_tst=True,
@@ -106,14 +105,15 @@ rule combined_metrics:
         combine_csvs(input, output[0])
 
 
-def combine_replicate_csvs(csvs, exp_id, seg_id_idx=False):
+def combine_replicate_csvs(csvs, flow_red, temp_red, seg_id_idx=False):
     df_list = []
     for i, metric_file in enumerate(csvs):
         df = pd.read_csv(metric_file)
         df['run_id'] = i
         df_list.append(df)
     df = pd.concat(df_list, axis=0)
-    df['exp_id'] = exp_id
+    df['flow_red'] = flow_red
+    df['temp_red'] = flow_red
     idx_cols = ['run_id', 'variable', 'partition', 'exp_id']
     if seg_id_idx:
         idx_cols.append('seg_id_nat')
@@ -122,13 +122,13 @@ def combine_replicate_csvs(csvs, exp_id, seg_id_idx=False):
 
 rule combined_run_metrics:
     input:
-         expand("{outdir}/ex_{experiment}/{run_id}/combined_metrics.csv",
+         expand("{outdir}/ex_flow_red_{flow_red}_temp_red_{temp_red}/{run_id}/combined_metrics.csv",
                 run_id=list(range(num_replicates)), allow_missing=True)
     output:
-         "{outdir}/ex_{experiment}/overall_metrics.nc"
+         "{outdir}/ex_flow_red_{flow_red}_temp_red_{temp_red}/overall_metrics.nc"
     group: "post_proc"
     run:
-        ds = combine_replicate_csvs(input, wildcards.experiment)
+        ds = combine_replicate_csvs(input, wildcards.flow_red, wildcards.temp_red, wildcards.experiment)
         ds.to_netcdf(output[0])
 
 
@@ -147,13 +147,14 @@ rule calc_reach_specific_metrics:
 
 rule combined_run_reach_metrics:
     input:
-         expand("{outdir}/ex_{experiment}/{run_id}/reach_metrics.csv",
+         expand("{outdir}/ex_flow_red_{flow_red}_temp_red_{temp_red}/{run_id}/reach_metrics.csv",
                 run_id=list(range(num_replicates)), allow_missing=True)
     output:
-         "{outdir}/ex_{experiment}/overall_reach_metrics.nc"
+         "{outdir}/ex_flow_red_{flow_red}_temp_red_{temp_red}/overall_reach_metrics.nc"
     group: "post_proc"
     run:
-        ds = combine_replicate_csvs(input, wildcards.experiment, seg_id_idx=True)
+        ds = combine_replicate_csvs(input, wildcards.flow_red, wildcards.temp_red, wildcards.experiment,
+                                    seg_id_idx=True)
         ds.to_netcdf(output[0])
 
 
@@ -172,7 +173,9 @@ def combine_exper_metrics(experiment_metric_files, outfile, reach_metrics=False)
 
 rule combine_exp_metrics:
     input:
-        expand("{outdir}/ex_{experiment}/overall_metrics.nc", experiment=list(config['experiments'].keys()), allow_missing=True)
+        expand("{outdir}/ex_flow_red_{flow_red}_temp_red_{temp_red}/overall_metrics.nc",
+                flow_red=config['flow_reductions'], temp_red=config['temp_reductions'],
+                allow_missing=True)
     output:
         "{outdir}/exp_combined_metrics.nc"
     run:
@@ -180,7 +183,9 @@ rule combine_exp_metrics:
 
 rule combine_exp_reach_metrics:
     input:
-        expand("{outdir}/ex_{experiment}/overall_reach_metrics.nc", experiment=list(config['experiments'].keys()), allow_missing=True)
+        expand("{outdir}/ex_flow_red_{flow_red}_temp_red_{temp_red}/overall_reach_metrics.nc",
+                flow_red=config['flow_reductions'], temp_red=config['temp_reductions'],
+                allow_missing=True)
     output:
         "{outdir}/exp_combined_reach_metrics.nc"
     run:
