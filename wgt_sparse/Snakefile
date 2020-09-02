@@ -11,7 +11,7 @@ shell.prefix("module load analytics cuda100/toolkit/10.0.130 \n \
 from river_dl.preproc_utils import prep_data
 from river_dl.postproc_utils import predict_from_file, overall_metrics, combined_reach_specific, combine_csvs
 data_dir = "/home/jsadler/drb-dl-model/data/in"
-out_dir = "/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/wgt_experiment"
+out_dir = f"/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/{config['exp_name']}"
 x_vars = ['seg_rain', 'seg_tave_air', 'seginc_swrad', 'seg_length', 'seginc_potet', 'seg_slope', 'seg_humid', 'seg_elev']
 num_replicates = 5
 
@@ -37,7 +37,7 @@ rule prep_io_data:
     run:
         prep_data(input[0], input[1], input[2], input[3], x_vars,
                   catch_prop_file=input['catch_attr'],
-                  reduce_temp_trn=config.get('reduce_temp_trn', 0.95),
+                  reduce_temp_trn=config.get('reduce_temp_trn', 0),
                   reduce_flow_trn=config.get('reduce_flow_trn', 0),
                   exclude_file=config.get('exclude_file'),
                   test_start_date=params.test_start_date,
