@@ -6,7 +6,7 @@ code_dir = "/home/jsadler/drb-dl-model/river_dl"
 shell.prefix("module load analytics cuda100/toolkit/10.0.130 \n \
               run_training -e /home/jsadler/.conda/envs/rgcn --no-node-list ")
 
-from river_dl.preproc_utils import prep_data
+from river_dl.preproc_utils import prep_data, reduce_training_data
 from river_dl.postproc_utils import predict_from_file, combine_overall, combined_reach_specific, combine_csvs
 data_dir = "/home/jsadler/drb-dl-model/data/in"
 out_dir = f"/caldera/projects/usgs/water/iidd/datasci/drb_ml_model/experiments/subset/{config['exp_name']}"
@@ -19,16 +19,31 @@ rule all:
         f"{out_dir}/exp_combined_metrics.csv",
         f"{out_dir}/exp_combined_reach_metrics.csv"
 
+rule sparsify_temp:
+    input:
+        f"{data_dir}/obs_temp_subset"
+    output:
+        "{outdir}/temp_red_{temp_red}/{run_id}/reduced_temp"
+    run:
+        reduce_training_data(input[0], wildcards.temp_red, output[0])
 
+rule sparsify_flow:
+    input:
+        f"{data_dir}/obs_flow_subset"
+    output:
+        "{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/reduced_flow"
+    run:
+        reduce_training_data(input[0], wildcards.flow_red, output[0])
+        
 rule prep_io_data:
     input:
-         f"{data_dir}/obs_temp_full",
-         f"{data_dir}/obs_flow_full",
-         f"{data_dir}/uncal_sntemp_input_output_subset",
-         f"{data_dir}/distance_matrix_subset.npz",
-         catch_attr = f"{data_dir}/seg_attr_drb.feather"
+        "{outdir}/temp_red_{temp_red}/{run_id}/reduced_temp",
+        "{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/reduced_flow",
+        f"{data_dir}/uncal_sntemp_input_output_subset",
+        f"{data_dir}/distance_matrix_subset.npz",
+        catch_attr = f"{data_dir}/seg_attr_drb.feather"
     output:
-        "{outdir}/ex_flow_red_{flow_red}_temp_red_{temp_red}/{run_id}/prepped.npz"
+        "{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/prepped.npz"
     params:
         test_start_date='2004-09-30',
         n_test_yr=12
@@ -46,10 +61,10 @@ rule prep_io_data:
 # this must be a shell command so that the correct GPU libraries are loaded and used
 rule train:
     input:
-         "{outdir}/ex_{experiment}/{run_id}/prepped.npz"
+         "{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/prepped.npz"
     output:
-        directory("{outdir}/ex_{experiment}/{run_id}/trained_weights/"),
-        directory("{outdir}/ex_{experiment}/{run_id}/pretrained_weights/")
+        directory("{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/trained_weights/"),
+        directory("{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/pretrained_weights/")
     params:
         # getting the base path to put the training outputs in
         # I omit the last slash (hence '[:-1]' so the split works properly
@@ -65,13 +80,13 @@ rule train:
 
 rule make_predictions:
     input: 
-        "{outdir}/ex_{experiment}/{run_id}/trained_weights/",
-        "{outdir}/ex_{experiment}/{run_id}/prepped.npz",
+        "{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/trained_weights/",
+        "{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/prepped.npz",
     params:
         hidden_size=20,
         half_tst=True,
     output:
-        "{outdir}/ex_{experiment}/{run_id}/{partition}_preds.feather",
+        "{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/{partition}_preds.feather",
     group: "post_proc"
     run:
         predict_from_file(input[0], input[1], params.hidden_size,
@@ -81,12 +96,12 @@ rule make_predictions:
 
 rule combined_metrics:
     input:
-         "{outdir}/ex_{experiment}/{run_id}/trn_preds.feather",
-         "{outdir}/ex_{experiment}/{run_id}/tst_preds.feather",
+         "{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/trn_preds.feather",
+         "{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/tst_preds.feather",
          f"{data_dir}/obs_temp_full",
          f"{data_dir}/obs_flow_full"
     output:
-         "{outdir}/ex_{experiment}/{run_id}/overall_run_metrics.csv"
+         "{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/overall_metrics.csv"
     group: "post_proc"
     run:
         combine_overall(input[0], input[1], input[2], input[3], output[0])
@@ -103,55 +118,25 @@ def combine_replicate_csvs(csvs, flow_red, temp_red, seg_id_idx=False):
     df['temp_red'] = float(temp_red)
     return df
 
-rule combined_run_metrics:
-    input:
-         expand("{outdir}/ex_flow_red_{flow_red}_temp_red_{temp_red}/{run_id}/overall_run_metrics.csv",
-                run_id=list(range(num_replicates)), allow_missing=True)
-    output:
-         "{outdir}/ex_flow_red_{flow_red}_temp_red_{temp_red}/overall_metrics.csv"
-    group: "post_proc"
-    run:
-        df = combine_replicate_csvs(input, wildcards.flow_red, wildcards.temp_red)
-        df.to_csv(output[0], index=False)
-
 
 rule calc_reach_specific_metrics:
     input: 
-         "{outdir}/ex_{experiment}/{run_id}/trn_preds.feather",
-         "{outdir}/ex_{experiment}/{run_id}/tst_preds.feather",
+         "{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/trn_preds.feather",
+         "{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/tst_preds.feather",
          f"{data_dir}/obs_temp_full",
          f"{data_dir}/obs_flow_full",
     output:
-        "{outdir}/ex_{experiment}/{run_id}/reach_metrics.csv",
+        "{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/reach_metrics.csv",
     group: "post_proc"
     run:
         combined_reach_specific(input[0], input[1], input[2], input[3], output[0])
 
 
-rule combined_run_reach_metrics:
-    input:
-         expand("{outdir}/ex_flow_red_{flow_red}_temp_red_{temp_red}/{run_id}/reach_metrics.csv",
-                run_id=list(range(num_replicates)), allow_missing=True)
-    output:
-         "{outdir}/ex_flow_red_{flow_red}_temp_red_{temp_red}/overall_reach_metrics.csv"
-    group: "post_proc"
-    run:
-        df = combine_replicate_csvs(input, wildcards.flow_red, wildcards.temp_red, seg_id_idx=True)
-        df.to_csv(output[0], index=False)
-
-
-def combine_exper_metrics(experiment_metric_files):
-    df_list = []
-    for exp in experiment_metric_files:
-        df_list.append(pd.read_csv(exp))
-    df_comb = pd.concat(df_list)
-    return df_comb
-
 rule combine_exp_metrics:
     input:
-        expand("{outdir}/ex_flow_red_{flow_red}_temp_red_{temp_red}/overall_metrics.csv",
+        expand("{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/overall_metrics.csv",
                 flow_red=config['flow_reductions'], temp_red=config['temp_reductions'],
-                allow_missing=True)
+                run_id=list(range(num_replicates)), allow_missing=True)
     output:
         "{outdir}/exp_combined_metrics.csv"
     run:
@@ -160,9 +145,9 @@ rule combine_exp_metrics:
 
 rule combine_exp_reach_metrics:
     input:
-        expand("{outdir}/ex_flow_red_{flow_red}_temp_red_{temp_red}/overall_reach_metrics.csv",
+        expand("{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/reach_metrics.csv",
                 flow_red=config['flow_reductions'], temp_red=config['temp_reductions'],
-                allow_missing=True)
+                run_id=list(range(num_replicates)), allow_missing=True)
     output:
         "{outdir}/exp_combined_reach_metrics.csv"
     run:
