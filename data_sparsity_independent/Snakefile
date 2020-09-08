@@ -23,17 +23,17 @@ rule sparsify_temp:
     input:
         f"{data_dir}/obs_temp_subset"
     output:
-        "{outdir}/temp_red_{temp_red}/{run_id}/reduced_temp"
+        directory("{outdir}/temp_red_{temp_red}/{run_id}/reduced_temp")
     run:
-        reduce_training_data(input[0], wildcards.temp_red, output[0])
+        reduce_training_data(input[0], float(wildcards.temp_red), output[0])
 
 rule sparsify_flow:
     input:
         f"{data_dir}/obs_flow_subset"
     output:
-        "{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/reduced_flow"
+        directory("{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/reduced_flow")
     run:
-        reduce_training_data(input[0], wildcards.flow_red, output[0])
+        reduce_training_data(input[0], float(wildcards.flow_red), output[0])
         
 rule prep_io_data:
     input:
@@ -50,8 +50,6 @@ rule prep_io_data:
     run:
         prep_data(input[0], input[1], input[2], input[3], x_vars,
                   catch_prop_file=input['catch_attr'],
-                  reduce_temp_trn=float(wildcards.temp_red),
-                  reduce_flow_trn=float(wildcards.flow_red),
                   exclude_file=config.get('exclude_file'),
                   test_start_date=params.test_start_date,
                   log_q=True,
@@ -107,15 +105,16 @@ rule combined_metrics:
         combine_overall(input[0], input[1], input[2], input[3], output[0])
 
 
-def combine_replicate_csvs(csvs, flow_red, temp_red, seg_id_idx=False):
+def combine_exp_metrics(csvs):
     df_list = []
-    for i, metric_file in enumerate(csvs):
+    for metric_file in csvs:
+        file_parts = metric_file.split('/')
         df = pd.read_csv(metric_file)
-        df['run_id'] = i
+        df['run_id'] = int(file_parts[-3])
+        df['flow_red'] = float(file_parts[-2].split('_')[-1])
+        df['temp_red'] = float(file_parts[-4].split('_')[-1])
         df_list.append(df)
     df = pd.concat(df_list, axis=0)
-    df['flow_red'] = float(flow_red)
-    df['temp_red'] = float(temp_red)
     return df
 
 
@@ -132,7 +131,7 @@ rule calc_reach_specific_metrics:
         combined_reach_specific(input[0], input[1], input[2], input[3], output[0])
 
 
-rule combine_exp_metrics:
+rule combine_overall_metrics:
     input:
         expand("{outdir}/temp_red_{temp_red}/{run_id}/flow_red_{flow_red}/overall_metrics.csv",
                 flow_red=config['flow_reductions'], temp_red=config['temp_reductions'],
@@ -140,7 +139,7 @@ rule combine_exp_metrics:
     output:
         "{outdir}/exp_combined_metrics.csv"
     run:
-        combined = combine_exper_metrics(input)
+        combined = combine_exp_metrics(input)
         combined.to_csv(output[0], index=False)
 
 rule combine_exp_reach_metrics:
@@ -151,6 +150,6 @@ rule combine_exp_reach_metrics:
     output:
         "{outdir}/exp_combined_reach_metrics.csv"
     run:
-        combined = combine_exper_metrics(input)
+        combined = combine_exp_metrics(input)
         combined.to_csv(output[0], index=False)
 
